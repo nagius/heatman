@@ -46,6 +46,16 @@ class App < Sinatra::Base
 		erb :index
 	end
 
+	get '/switch/:mode' do |mode|
+		if %w(on off eco).include? mode
+			if not system("#{settings.pilot_cmd} #{mode}")
+				halt 500, "Pilot script failed"
+			end
+		else
+			halt 405, "Method not allowed"
+		end
+	end
+
 end
 
 # vim: ts=4:sw=4:ai:noet
