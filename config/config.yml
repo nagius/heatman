@@ -1,2 +1,3 @@
 ---
 title: "Heatman"
+pilot_cmd: "/usr/local/bin/heaters.sh"
