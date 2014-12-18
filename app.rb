@@ -46,6 +46,7 @@ class App < Sinatra::Base
 		erb :index
 	end
 
+	# TODO use a POST instead
 	get '/switch/:mode' do |mode|
 		if %w(on off eco).include? mode
 			if not system("#{settings.pilot_cmd} #{mode}")
@@ -54,6 +55,16 @@ class App < Sinatra::Base
 		else
 			halt 405, "Method not allowed"
 		end
+	end
+
+	# Get the current status
+	get '/switch/?' do
+		# TODO build a nice function with JSON output and error message from the command
+		status=`#{settings.pilot_cmd} status`
+		if $?.exitstatus != 0
+			halt 500, "Pilot script failed"
+		end
+		status
 	end
 
 end
