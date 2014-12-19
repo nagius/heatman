@@ -22,6 +22,11 @@
 ###########################################################################
 
 module Heatman
+
+	def get_status()
+		run_cmd "status"
+	end
+
 	def run_cmd(action)
 		# TODO addJSON output and error message from the command
 

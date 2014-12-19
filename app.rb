@@ -60,7 +60,7 @@ class App < Sinatra::Base
 
 	# Get the current status
 	get '/switch/?' do
-		run_cmd "status"
+		get_status()
 	end
 
 end
