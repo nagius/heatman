@@ -21,48 +21,17 @@
 #
 ###########################################################################
 
+module Heatman
+	def run_cmd(action)
+		# TODO addJSON output and error message from the command
 
-require 'sinatra/base'
-require 'sinatra/config_file'
-require 'sinatra/assetpack'
-require_relative 'app/heatman'
-
-class App < Sinatra::Base
-	register Sinatra::AssetPack
-	register Sinatra::ConfigFile
-	helpers Heatman
-
-	# Asset pipeline configuration
-	assets do
-		js :app, [ '/js/*.js' ]
-
-		css :app, [ '/css/*.css' ]
-
-		js_compression  :jsmin    # :jsmin | :yui | :closure | :uglify
-		css_compression :simple   # :simple | :sass | :yui | :sqwish
-	end 
-
-	# Application configuration
-	config_file "config/config.yml"
-
-	get '/' do
-		erb :index
-	end
-
-	# TODO use a POST instead (+ param permanent)
-	get '/switch/:mode' do |mode|
-		if %w(on off eco).include? mode
-			run_cmd mode
-		else
-			halt 405, "Method not allowed"
+		status=`#{settings.pilot_cmd} #{action}`
+			if $?.exitstatus != 0
+			halt 500, "Pilot script failed"
 		end
-	end
 
-	# Get the current status
-	get '/switch/?' do
-		run_cmd "status"
+		status
 	end
-
 end
 
 # vim: ts=4:sw=4:ai:noet
