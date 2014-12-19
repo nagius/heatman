@@ -21,10 +21,19 @@
 #
 ###########################################################################
 
+# Sinatra helper for Heatman
 module Heatman
 
 	def get_status()
 		run_cmd "status"
+	end
+
+	def switch(mode)
+		if %w(on off eco).include? mode
+			run_cmd mode
+		else
+			halt 405, "Method not allowed"
+		end
 	end
 
 	def run_cmd(action)

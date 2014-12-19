@@ -51,11 +51,7 @@ class App < Sinatra::Base
 
 	# TODO use a POST instead (+ param permanent)
 	get '/switch/:mode' do |mode|
-		if %w(on off eco).include? mode
-			run_cmd mode
-		else
-			halt 405, "Method not allowed"
-		end
+		switch(mode)
 	end
 
 	# Get the current status
