@@ -23,6 +23,8 @@
 
 require 'chronic_between'
 
+# TODO improve error handling with exception instead of halt ?
+
 # Sinatra helper for Heatman
 module Heatman
 
@@ -45,11 +47,11 @@ module Heatman
 	end
 
 	def apply(channel, action)
-		# TODO addJSON output and error message from the command
+		cmd = settings.channels[channel]['command']
 
-		output = `#{settings.channels[channel]['command']} #{action}`
-		if $?.exitstatus != 0
-			halt 500, "External script failed"
+		output = `#{cmd} #{action}`
+		if not $?.success?
+			halt 500, "External script failed : exitcode #{$?.exitstatus} from #{cmd}"
 		end
 
 		output
