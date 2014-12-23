@@ -1,7 +1,12 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    app-routes (0.1.18)
     backports (3.6.4)
+    chronic (0.10.2)
+    chronic_between (0.2.21)
+      app-routes
+      chronic
     daemons (1.1.9)
     eventmachine (1.0.3)
     jsmin (1.0.1)
@@ -40,6 +45,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  chronic_between
   rake
   shotgun
   sinatra

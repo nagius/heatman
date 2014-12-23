@@ -21,6 +21,8 @@
 #
 ###########################################################################
 
+require 'chronic_between'
+
 # Sinatra helper for Heatman
 module Heatman
 
@@ -51,6 +53,17 @@ module Heatman
 		end
 
 		output
+	end
+
+	def get_scheduled_mode(channel)
+		settings.channels[channel]['schedules'].each do |mode, schedule|
+			if ChronicBetween.new(schedule).within? DateTime.now
+				return mode
+			end
+		end
+
+		# default
+		return settings.channels[channel]["default"]
 	end
 end
 

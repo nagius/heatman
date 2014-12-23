@@ -9,7 +9,7 @@ channels:
     modes:
       - "on"
       - "off"
-    schedule:
+    schedules:
         # See https://github.com/jrobertson/chronic_between for syntax and example
         'on': "17:00-19:00"
     default: "off"
@@ -22,7 +22,7 @@ channels:
       - "on"
       - "off"
       - "eco"
-    schedule:
+    schedules:
         # See https://github.com/jrobertson/chronic_between for syntax and example
         'on': "Mon-Fri 7:00-8:30, Mon-Fri 17:00-23:00, Sat-Sun 9:00-23:00"
         'off': "Wed 00:00-05:00"
