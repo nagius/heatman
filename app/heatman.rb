@@ -34,15 +34,20 @@ module Heatman
 		end
 	end
 
-	def get_status(channel)
-		apply(channel, "status")
-	end
-
-	def switch(channel, mode)
+	def verify_mode(channel, mode)
 		if not settings.channels[channel]['modes'].include? mode
 			halt 405, "Method not allowed"
 		end
+	end
 
+	def get_current_mode(channel)
+		mode=apply(channel, "status").strip
+		verify_mode(channel, mode)
+		return mode
+	end
+
+	def switch(channel, mode)
+		verify_mode(channel, mode)
 		apply(channel, mode)
 	end
 

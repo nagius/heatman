@@ -68,7 +68,7 @@ class App < Sinatra::Base
 	# Get the current status
 	get '/switch/:channel/?' do |channel|
 		halt_if_bad(channel)
-		get_status(channel)
+		get_current_mode(channel)
 		# TODO display if overrided
 	end
 
