@@ -45,13 +45,23 @@ class App < Sinatra::Base
 	# Application configuration
 	config_file "config/config.yml"
 
+	# Global variable 
+	@@overrides = Hash.new
+
 	get '/' do
 		erb :index
 	end
 
-	# TODO use a POST instead (+ param permanent)
-	get '/switch/:channel/:mode' do |channel, mode|
+	# TODO add 'auto' mode
+	post '/switch/:channel/:mode' do |channel, mode|
 		halt_if_bad(channel)
+
+		# Remember if we have a manual override
+		@@overrides[channel] = {
+			:mode => mode,
+			:persistent => params['persistent'] == "true"
+		}
+
 		switch(channel, mode)
 	end
 
@@ -59,6 +69,7 @@ class App < Sinatra::Base
 	get '/switch/:channel/?' do |channel|
 		halt_if_bad(channel)
 		get_status(channel)
+		# TODO display if overrided
 	end
 
 end
