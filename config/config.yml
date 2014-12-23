@@ -1,3 +1,30 @@
 ---
 title: "Heatman"
-pilot_cmd: "/usr/local/bin/heaters.sh"
+
+channels:
+  # Example for a two-state boiler control
+  boiler:
+    description: "The boiler"
+    command: "/usr/local/bin/boiler.sh"
+    modes:
+      - "on"
+      - "off"
+    schedule:
+        # See https://github.com/jrobertson/chronic_between for syntax and example
+        'on': "17:00-19:00"
+    default: "off"
+  
+  # Example for a three-state heater control
+  heater:
+    description: "The heater"
+    command: "/usr/local/bin/heaters.sh"
+    modes:
+      - "on"
+      - "off"
+      - "eco"
+    schedule:
+        # See https://github.com/jrobertson/chronic_between for syntax and example
+        'on': "Mon-Fri 7:00-8:30, Mon-Fri 17:00-23:00, Sat-Sun 9:00-23:00"
+        'off': "Wed 00:00-05:00"
+    default: "eco"
+

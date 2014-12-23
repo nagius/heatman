@@ -24,27 +24,33 @@
 # Sinatra helper for Heatman
 module Heatman
 
-	def get_status()
-		run_cmd "status"
-	end
-
-	def switch(mode)
-		if %w(on off eco).include? mode
-			run_cmd mode
-		else
+	def halt_if_bad(channel)
+		if not settings.channels.has_key?(channel)
 			halt 405, "Method not allowed"
 		end
 	end
 
-	def run_cmd(action)
-		# TODO addJSON output and error message from the command
+	def get_status(channel)
+		apply(channel, "status")
+	end
 
-		status=`#{settings.pilot_cmd} #{action}`
-			if $?.exitstatus != 0
-			halt 500, "Pilot script failed"
+	def switch(channel, mode)
+		if not settings.channels[channel]['modes'].include? mode
+			halt 405, "Method not allowed"
 		end
 
-		status
+		apply(channel, mode)
+	end
+
+	def apply(channel, action)
+		# TODO addJSON output and error message from the command
+
+		output = `#{settings.channels[channel]['command']} #{action}`
+		if $?.exitstatus != 0
+			halt 500, "External script failed"
+		end
+
+		output
 	end
 end
 

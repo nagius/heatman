@@ -50,13 +50,15 @@ class App < Sinatra::Base
 	end
 
 	# TODO use a POST instead (+ param permanent)
-	get '/switch/:mode' do |mode|
-		switch(mode)
+	get '/switch/:channel/:mode' do |channel, mode|
+		halt_if_bad(channel)
+		switch(channel, mode)
 	end
 
 	# Get the current status
-	get '/switch/?' do
-		get_status()
+	get '/switch/:channel/?' do |channel|
+		halt_if_bad(channel)
+		get_status(channel)
 	end
 
 end
