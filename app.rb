@@ -70,12 +70,12 @@ class App < Sinatra::Base
 	end
 	
 	# Get list of available channels
-	get '/switch/?' do 
+	get '/api/channels' do 
 		json settings.channels.keys
 	end
 
 	# Get the current mode
-	get '/switch/:channel/?' do |channel|
+	get '/api/channel/:channel/?' do |channel|
 		sanitize_channel!(channel)
 
 		get_current_mode(channel)
@@ -83,7 +83,7 @@ class App < Sinatra::Base
 	end
 
 	# Reset override
-	post '/switch/:channel/auto' do |channel|
+	post '/api/channel/:channel/auto' do |channel|
 		sanitize_channel!(channel)
 
 		@@overrides.delete(channel)
@@ -92,7 +92,7 @@ class App < Sinatra::Base
 	end
 
 	# Override scheduled mode
-	post '/switch/:channel/:mode' do |channel, mode|
+	post '/api/channel/:channel/:mode' do |channel, mode|
 		sanitize_channel!(channel)
 		begin
 			sanitize_mode!(channel, mode)
@@ -111,7 +111,7 @@ class App < Sinatra::Base
 	end
 
 	# Route used by the timer (crontab)
-	post '/tictac/' do
+	post '/api/tictac' do
 		settings.channels.each do |channel, options|
 			if @@overrides.has_key?(channel)
 				if not @@overrides[channel][:persistent] and @@overrides[channel][:mode] == get_scheduled_mode(channel)
