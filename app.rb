@@ -75,6 +75,7 @@ class App < Sinatra::Base
 	post '/switch/:channel/auto' do |channel|
 		@@overrides.delete(channel)
 		logger.info "Manual override deleted for channel #{channel}"
+		switch(channel, get_scheduled_mode(channel))
 		status 204
 	end
 
