@@ -36,6 +36,7 @@ class App < Sinatra::Base
 
 	# Framework configuration
 	configure :production, :development do
+		set :show_exceptions, :after_handler
 		enable :logging
 	end
 
@@ -52,6 +53,15 @@ class App < Sinatra::Base
 	# Application configuration
 	config_file "config/config.yml"
 
+	# Error handling
+	error Heatman::Forbidden do |e|
+		halt 405, json(:err => e.message)
+	end
+
+	error Heatman::InternalError do |e|
+		halt 500, json(:err => e.message)
+	end
+
 	# Global variable 
 	@@overrides = Hash.new
 
@@ -66,13 +76,16 @@ class App < Sinatra::Base
 
 	# Get the current mode
 	get '/switch/:channel/?' do |channel|
-		halt_if_bad(channel)
+		sanitize_channel!(channel)
+
 		get_current_mode(channel)
 		# TODO display if overrided
 	end
 
 	# Reset override
 	post '/switch/:channel/auto' do |channel|
+		sanitize_channel!(channel)
+
 		@@overrides.delete(channel)
 		logger.info "Manual override deleted for channel #{channel}"
 		switch(channel, get_scheduled_mode(channel))
@@ -80,7 +93,12 @@ class App < Sinatra::Base
 
 	# Override scheduled mode
 	post '/switch/:channel/:mode' do |channel, mode|
-		halt_if_bad(channel)
+		sanitize_channel!(channel)
+		begin
+			sanitize_mode!(channel, mode)
+		rescue Heatman::InternalError
+			raise Heatman::Forbidden, "Mode not allowed"
+		end
 
 		# Remember if we have a manual override
 		@@overrides[channel] = {

@@ -23,25 +23,23 @@
 
 require 'chronic_between'
 
-# TODO improve error handling with exception instead of halt ?
-
 # Sinatra helper for Heatman
 module Heatman
 
-	def halt_if_bad(channel)
+	def sanitize_channel!(channel)
 		if not settings.channels.has_key?(channel)
-			halt 405, "Method not allowed"
+			raise Forbidden, "Channel not allowed"
 		end
 	end
 
-	def verify_mode(channel, mode)
+	def sanitize_mode!(channel, mode)
 		if not settings.channels[channel]['modes'].include? mode
-			halt 405, "Method not allowed"
+			raise InternalError, "Unknown mode #{mode}"
 		end
 	end
 
 	def switch(channel, mode)
-		verify_mode(channel, mode)
+		sanitize_mode!(channel, mode)
 		if get_current_mode(channel) != mode
 			logger.info "Mode changed to #{mode} for channel #{channel}"
 			apply(channel, mode)
@@ -56,7 +54,7 @@ module Heatman
 
 		output = `#{cmd} #{action}`
 		if not $?.success?
-			halt 500, "External script failed : exitcode #{$?.exitstatus} from #{cmd}"
+			raise InternalError, "External script failed : exitcode #{$?.exitstatus} from #{cmd}"
 		end
 
 		output
@@ -64,7 +62,7 @@ module Heatman
 
 	def get_current_mode(channel)
 		mode=apply(channel, "status").strip
-		verify_mode(channel, mode)
+		sanitize_mode!(channel, mode)
 		return mode
 	end
 
@@ -77,6 +75,13 @@ module Heatman
 
 		# default
 		return settings.channels[channel]["default"]
+	end
+
+	# Customs exceptions
+	class Forbidden < StandardError
+	end
+
+	class InternalError < StandardError
 	end
 end
 
