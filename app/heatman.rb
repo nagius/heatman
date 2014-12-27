@@ -45,6 +45,9 @@ module Heatman
 		if get_current_mode(channel) != mode
 			logger.info "Mode changed to #{mode} for channel #{channel}"
 			apply(channel, mode)
+			status 200
+		else
+			status 204
 		end
 	end
 
