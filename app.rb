@@ -78,8 +78,10 @@ class App < Sinatra::Base
 	get '/api/channel/:channel/?' do |channel|
 		sanitize_channel!(channel)
 
-		get_current_mode(channel)
-		# TODO display if overrided
+		json(
+			:mode => get_current_mode(channel),
+			:override => @@overrides.has_key?(channel),
+			:persistent => @@overrides[channel].nil? ? false : @@overrides[channel][:persistent])
 	end
 
 	# Reset override
