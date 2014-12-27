@@ -23,6 +23,7 @@
 
 
 require 'sinatra/base'
+require 'sinatra/json'
 require 'sinatra/config_file'
 require 'sinatra/assetpack'
 require_relative 'app/heatman'
@@ -30,6 +31,7 @@ require_relative 'app/heatman'
 class App < Sinatra::Base
 	register Sinatra::AssetPack
 	register Sinatra::ConfigFile
+	helpers Sinatra::JSON
 	helpers Heatman
 
 	# Asset pipeline configuration
@@ -51,6 +53,18 @@ class App < Sinatra::Base
 	get '/' do
 		erb :index
 	end
+	
+	# Get list of available channels
+	get '/switch/?' do 
+		json settings.channels.keys
+	end
+
+	# Get the current mode
+	get '/switch/:channel/?' do |channel|
+		halt_if_bad(channel)
+		get_current_mode(channel)
+		# TODO display if overrided
+	end
 
 	# Reset override
 	post '/switch/:channel/auto' do |channel|
@@ -69,13 +83,6 @@ class App < Sinatra::Base
 		}
 
 		switch(channel, mode)
-	end
-
-	# Get the current mode
-	get '/switch/:channel/?' do |channel|
-		halt_if_bad(channel)
-		get_current_mode(channel)
-		# TODO display if overrided
 	end
 
 	# TODO add a log
