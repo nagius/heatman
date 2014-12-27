@@ -40,15 +40,11 @@ module Heatman
 		end
 	end
 
-	def get_current_mode(channel)
-		mode=apply(channel, "status").strip
-		verify_mode(channel, mode)
-		return mode
-	end
-
 	def switch(channel, mode)
 		verify_mode(channel, mode)
-		apply(channel, mode)
+		if get_current_mode(channel) != mode
+			apply(channel, mode)
+		end
 	end
 
 	def apply(channel, action)
@@ -60,6 +56,12 @@ module Heatman
 		end
 
 		output
+	end
+
+	def get_current_mode(channel)
+		mode=apply(channel, "status").strip
+		verify_mode(channel, mode)
+		return mode
 	end
 
 	def get_scheduled_mode(channel)
