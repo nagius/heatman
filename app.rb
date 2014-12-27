@@ -34,6 +34,11 @@ class App < Sinatra::Base
 	helpers Sinatra::JSON
 	helpers Heatman
 
+	# Framework configuration
+	configure :production, :development do
+		enable :logging
+	end
+
 	# Asset pipeline configuration
 	assets do
 		js :app, [ '/js/*.js' ]
@@ -69,6 +74,7 @@ class App < Sinatra::Base
 	# Reset override
 	post '/switch/:channel/auto' do |channel|
 		@@overrides.delete(channel)
+		logger.info "Manual override deleted for channel #{channel}"
 		status 204
 	end
 
@@ -82,10 +88,10 @@ class App < Sinatra::Base
 			:persistent => params['persistent'] == "true"
 		}
 
+		logger.info "Manual override set for channel #{channel} : #{params['persistent'] == "true"?"persistent ":"" }#{mode}"
 		switch(channel, mode)
 	end
 
-	# TODO add a log
 	# Route used by the timer (crontab)
 	post '/tictac/' do
 		settings.channels.each do |channel, options|
@@ -93,6 +99,7 @@ class App < Sinatra::Base
 				if not @@overrides[channel][:persistent] and @@overrides[channel][:mode] == get_scheduled_mode(channel)
 					# Reset temporary override
 					@@overrides.delete(channel)
+					logger.info "Manual override expired for channel #{channel}"
 				end
 			else
 				# Set the scheduled mode only if no override

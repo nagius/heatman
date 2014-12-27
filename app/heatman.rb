@@ -43,6 +43,7 @@ module Heatman
 	def switch(channel, mode)
 		verify_mode(channel, mode)
 		if get_current_mode(channel) != mode
+			logger.info "Mode changed to #{mode} for channel #{channel}"
 			apply(channel, mode)
 		end
 	end
