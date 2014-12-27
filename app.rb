@@ -72,6 +72,22 @@ class App < Sinatra::Base
 		# TODO display if overrided
 	end
 
+	# TODO add a log
+	# Route used by the timer (crontab)
+	post '/tictac/' do
+		settings.channels.each do |channel, options|
+			if @@overrides.has_key?(channel)
+				if not @@overrides[channel][:persistent] and @@overrides[channel][:mode] == get_scheduled_mode(channel)
+					# Reset temporary override
+					@@overrides.delete(channel)
+				end
+			else
+				# Set the scheduled mode only if no override
+				switch(channel, get_scheduled_mode(channel))
+			end
+		end
+		status 204
+	end
 end
 
 # vim: ts=4:sw=4:ai:noet
