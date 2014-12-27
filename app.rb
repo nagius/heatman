@@ -52,7 +52,13 @@ class App < Sinatra::Base
 		erb :index
 	end
 
-	# TODO add 'auto' mode
+	# Reset override
+	post '/switch/:channel/auto' do |channel|
+		@@overrides.delete(channel)
+		status 204
+	end
+
+	# Override scheduled mode
 	post '/switch/:channel/:mode' do |channel, mode|
 		halt_if_bad(channel)
 
@@ -65,7 +71,7 @@ class App < Sinatra::Base
 		switch(channel, mode)
 	end
 
-	# Get the current status
+	# Get the current mode
 	get '/switch/:channel/?' do |channel|
 		halt_if_bad(channel)
 		get_current_mode(channel)
