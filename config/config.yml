@@ -4,7 +4,7 @@ title: "Heatman"
 channels:
   # Example for a two-state boiler control
   boiler:
-    description: "The boiler"
+    label: "Bathroom boiler"
     command: "/usr/local/bin/boiler.sh"
     modes:
       - "on"
@@ -16,7 +16,7 @@ channels:
   
   # Example for a three-state heater control
   heater:
-    description: "The heater"
+    label: "Living room heater"
     command: "/usr/local/bin/heaters.sh"
     modes:
       - "on"

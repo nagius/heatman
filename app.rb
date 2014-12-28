@@ -71,7 +71,14 @@ class App < Sinatra::Base
 	
 	# Get list of available channels
 	get '/api/channels' do 
-		json settings.channels.keys
+		channels = Hash.new
+		settings.channels.each do |channel, options|
+			# Filter only wanted keys
+			channels[channel]=options.select do |k,v|
+				%w[label modes].include? k
+			end
+		end
+		json channels
 	end
 
 	# Get the current mode
