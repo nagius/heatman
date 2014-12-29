@@ -1,6 +1,23 @@
 
-<a href="/switch/on">Switch on</a>
-<a href="/switch/off">Switch off</a>
-<a href="/switch/eco">Switch eco</a>
+<ul data-role="listview" data-inset="true" data-dividertheme="b">
+        <li data-role="list-divider">Current mode</li>
+	<% settings.channels.each do |channel, options| %>
+		<li>
+			<h4><%= options["label"] %></h4>
+			<form id=<%= channel %>>
+				<fieldset data-role="controlgroup" data-type="horizontal" >
+					<% options["modes"].each do |mode| %>
+						<input id="<%= channel %>-<%= mode %>" value="list" type="radio">
+						<label for="<%= channel %>-<%= mode %>"><%= mode.capitalize %></label>
+					<% end %>
+					<input id="<%= channel %>-auto" value="list" type="radio">
+					<label for="<%= channel %>-auto">Auto</label>
+				</fieldset>
+				<label for="<%= channel %>-persistent">Persistent override:</label>
+				<input data-role="flipswitch" id="<%= channel %>-persistent" type="checkbox">
+			</form>
+		</li>
+	<% end %>
+</ul>
 
 
