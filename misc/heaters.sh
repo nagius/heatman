@@ -20,6 +20,12 @@
 #
 ###########################################################################
 
+# This is a wrapper script for the Heatman system to manage electrical heaters
+# Available mode are : 
+#   - on
+#   - off
+#   - eco
+
 # The 4-orders pilot wire on electrical heaters works like that :
 # 
 #  - No connection : Full power
@@ -48,6 +54,12 @@ function exit_with_error
 
 function enable_gpio_port
 {
+	# Check if machine is GPIO enabled
+	if [ ! -d $GPIO_PATH ]; then
+		echo "ERROR: GPIO not available."
+		exit 1
+	fi
+
 	# Configure GPIO port as output
 	if [ ! -e $GPIO_PATH/gpio$1/value ]; then
 		echo $1 >$GPIO_PATH/export
@@ -82,13 +94,14 @@ case "$1" in
 		OFF=$(cat $FILE_OFF)
 
 		if [ "$ECO" -eq 0 -a "$OFF" -eq 0 ]; then
-			echo "Full power mode."
+			echo "on"
 		elif [ "$ECO" -eq 1 -a "$OFF" -eq 0 ]; then
-			echo "Economic mode."
+			echo "eco"
 		elif [ "$ECO" -eq 0 -a "$OFF" -eq 1 ]; then
-			echo "Off mode."
+			echo "off"
 		else
 			echo "ERROR: unpredictable mode."
+			exit 1
 		fi
 		
 		;;
