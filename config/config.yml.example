@@ -5,7 +5,7 @@ channels:
   # Example for a two-state boiler control
   boiler:
     label: "Bathroom boiler"
-    command: "/usr/local/bin/boiler.sh"
+    command: "sudo /usr/local/sbin/boiler.sh"
     modes:
       - "on"
       - "off"
@@ -17,7 +17,7 @@ channels:
   # Example for a three-state heater control
   heater:
     label: "Living room heater"
-    command: "/usr/local/bin/heaters.sh"
+    command: "sudo /usr/local/sbin/heaters.sh"
     modes:
       - "on"
       - "off"
