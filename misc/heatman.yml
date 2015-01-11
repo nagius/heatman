@@ -1,0 +1,19 @@
+# /etc/thin/heatman.yml - Thin configuration file 
+user: www-data
+group: www-data
+pid: /var/run/thin/heatman.pid
+timeout: 30
+wait: 30
+log: /var/log/thin/heatman.log
+max_conns: 1024
+require: []
+environment: production
+max_persistent_conns: 512
+servers: 1
+onebyone: true
+threaded: true
+no-epoll: true
+daemonize: true
+socket: /var/run/thin/heatman.sock
+chdir: /srv/www/heatman/
+tag: Heatman
