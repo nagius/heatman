@@ -1,6 +1,7 @@
 ---
 title: "Heatman"
-
+# See https://github.com/jmettraux/rufus-scheduler for syntax
+timer: "5m"
 channels:
   # Example for a two-state boiler control
   boiler:

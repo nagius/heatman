@@ -26,6 +26,7 @@ require 'sinatra/base'
 require 'sinatra/json'
 require 'sinatra/config_file'
 require 'sinatra/assetpack'
+require 'rufus/scheduler'
 require_relative 'app/heatman'
 
 class App < Sinatra::Base
@@ -65,6 +66,18 @@ class App < Sinatra::Base
 	# Global variable 
 	@@overrides = Hash.new
 
+	# Setup the timer
+	Rufus::Scheduler.new.every(settings.timer, :first_in => "1s") do
+		call(
+			'REQUEST_METHOD' => 'POST',
+			'PATH_INFO' => '/api/tictac',
+			'rack.input' => StringIO.new,
+		)
+	end
+
+	## Application routes
+	
+	# Main page
 	get '/' do
 		erb :index
 	end
