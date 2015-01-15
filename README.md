@@ -39,7 +39,8 @@ channels:
 ```
 
 In this example, the light will be switched to "blue" each day between 5pm and 7pm, and switched to "yellow" on Monday at 9am for half an hour, andon Sunday at noon for one hour. It will be "off" the rest of the time.
-See https://github.com/jrobertson/chronic_between for more example in scheduler syntax.
+
+See https://github.com/jrobertson/chronic_between for more example of scheduler syntax.
 
 
 Installation
@@ -111,7 +112,7 @@ openssl req -new -x509 -key /etc/nginx/ssl/privkey.pem -out /etc/nginx/ssl/cacer
 
 * Sudo configuration
 
-Edit sudoers:
+In /etc/sudoers :
 
 ```
 www-data ALL=NOPASSWD: /usr/local/sbin/boiler.sh, /usr/local/sbin/heaters.sh
@@ -166,13 +167,15 @@ All actions could be done via this API, which is used by the JQuery web page.
 
 Return the hash table of available channels with corresponding mode and label.
 
-* GET /api/channel/<channel_name>
+* GET /api/channel/\<channel_name\>
 
 Return the current mode of the specified channel.
 
-* POST /api/channel/<channel_name>/<mode>
+* POST /api/channel/\<channel_name\>/\<mode\>
 
-Override the current channel's mode. Mode can be 'auto' to switch back to scheduled mode.
+Override the current channel's mode. 
+
+Mode can be 'auto' to switch back to scheduled mode.
 If the parameter ''persistent=true'' is send, the scheduler will be permanently disabled for this channel.
 Return ''200 OK'' is the state has been changed, or ''204 No content'' if the requested mode was already enabled.
 
