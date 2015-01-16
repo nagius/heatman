@@ -82,7 +82,7 @@ class App < Sinatra::Base
 		erb :index
 	end
 	
-	# Get list of available channels
+	# Get the list of available channels
 	get '/api/channels' do 
 		channels = Hash.new
 		settings.channels.each do |channel, options|
@@ -147,6 +147,19 @@ class App < Sinatra::Base
 				switch(channel, get_scheduled_mode(channel))
 			end
 		end
+	end
+
+	# Get the list of available sensors 
+	get '/api/sensors' do 
+		sensors = Hash.new
+		settings.sensors.each do |sensor, options|
+			# Filter only wanted keys
+			sensors[sensor]=options.select do |k,v|
+				%w[label unit].include? k
+			end
+			sensors[sensor][:history]=options.has_key?("rrd")
+		end
+		json sensors
 	end
 end
 

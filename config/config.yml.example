@@ -2,6 +2,7 @@
 title: "Heatman"
 # See https://github.com/jmettraux/rufus-scheduler for syntax
 timer: "5m"
+
 channels:
   # Example for a two-state boiler control
   boiler:
@@ -28,4 +29,18 @@ channels:
         'on': "Mon-Fri 7:00-8:30, Mon-Fri 17:00-23:00, Sat-Sun 9:00-23:00"
         'off': "Wed 00:00-05:00"
     default: "eco"
+
+sensors:
+  # Example of a sensor getting its value from a rrd file (allow history and graphs)
+  temp:
+    label: "Room temperature"
+    unit: "°C"
+    rrd: "/var/lib/rrd/room.rrd"
+    dsname: "temp"
+
+  # Example of a sensor getting its value from a script
+  power:
+    label: "Electric consumption"
+    unit: "w"
+    command: "/usr/local/bin/get_power.sh" 
 
