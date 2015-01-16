@@ -20,12 +20,42 @@
 #
 ###########################################################################
 
-# This is a wrapper script for the Heatman system to manage electrical water heaters
+# This is a wrapper script for the Heatman system to manage electrical water heaters.
 # Available mode are : 
 #   - on
 #   - off
 
-# TODO: Add Raspberri Pi wiring schematics
+# This script use Raspberry Pi's GPIO output to switch relays sending 230V to the boiler.
+#
+#                     =5V                          ~230V
+#                     VCC                           VAC
+#                      +                             +
+#                      |                             |
+#                      |             .---------------o
+#                      |             |               |
+#   GPIO 22  ___     |/              o               o
+#       ----|___|----|               (   FUSE        (   FUSE
+#                    |>               )  2A           )  25A
+#                      |             o               o
+#                      |             |               |
+#                      |             |               |
+#                      o--------.    |              .-. 
+#                      |        |    |             ( X ) Boiler
+#                      -       _|_   o  /           '-'
+#                      ^      |_/_|-   /             |
+#                      |        |     /              |
+#                      |        |    o               |
+#                      o--------'    |               |
+#                      |              ----------.    |    
+#                      |                       _|_   o  /   
+#                      |                      |_/_|-   /    Max 250V 25A 
+#                      |                        |     /     Legrand 412501
+#                      |                        |    o
+#                      |                        |    |
+#                      |                        '----o
+#                      |                             |
+#                     ===                           ===
+#                     GND                        AC Neutral
 
 # Select which GPIO port to use
 GPIO=22

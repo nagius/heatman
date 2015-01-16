@@ -33,9 +33,48 @@
 #  - 230 V AC positive alternance : Off mode
 #  - 230 V AC negative alternance : Anti-frost mode
 
-# This script use Raspberry Pi's GPIO output to swith relays sending 230V to the pilot wire.
+# This script use Raspberry Pi's GPIO output to switch relays sending 230V to the pilot wire.
 # Anti-frost is not implemented as is require one more relay. Only 2 are currently used.
-# TODO: Add Raspberri Pi wiring schematics
+#
+#                                 ~230V
+#                                  VAC
+#                                   +
+#                       =5V         |
+#                       VCC         o
+#                        +          (   FUSE
+#                        |           )  2A
+#     GPIO 23   ___    |/           o
+#     ECO   ---|___|---|            |
+#                      |>           |
+#                        |          |
+#                        o-----.    o
+#                        |    _|_    \
+#                        -   |_/_|-   \
+#                        ^     |    o  \o
+#                        |     |    |   |
+#                        o-----'    |   |
+#                        |          |   |
+#                       ===         |   |
+#                       GND         |   |
+#                                   '---)--------o----> Heater pilot wire
+#                                       |        |
+#                           =5V         |        |
+#                           VCC         |        |
+#                            +          |        |
+#                            |          |        -  Diode
+#        GPIO 24    ___    |/           |        ^  1N4007
+#        OFF ------|___|---|            |        |
+#                          |>           |        |
+#                            |          |        |
+#                            o-----.    o        |
+#                            |    _|_    \       |
+#                            -   |_/_|-   \      |
+#                            ^     |    o  \     |
+#                            |     |    |        |
+#                            o-----'    |        |
+#                            |          |        |
+#                           ===         '--------'
+#                           GND
 
 # Select which GPIO port to use
 GPIO_ECO=23
