@@ -38,6 +38,12 @@ module Heatman
 		end
 	end
 
+	def sanitize_sensor!(sensor)
+		if not settings.sensors.has_key?(sensor)
+			raise Forbidden, "Sensor not allowed"
+		end
+	end
+
 	def switch(channel, mode)
 		sanitize_mode!(channel, mode)
 		if get_current_mode(channel) != mode
@@ -75,6 +81,23 @@ module Heatman
 
 		# default
 		return settings.channels[channel]["default"]
+	end
+
+	def get_sensor_value(sensor)
+		options=settings.sensors[sensor]
+
+		if options.has_key?("command")
+			# Get value from script
+			output = `#{options['command']}`
+			if not $?.success?
+				raise InternalError, "External script failed : exitcode #{$?.exitstatus} from #{options['command']}"
+			end
+
+			return output.strip
+		else
+			raise InternalError, "No data source found for #{sensor}"
+		end
+
 	end
 
 	# Customs exceptions

@@ -161,6 +161,13 @@ class App < Sinatra::Base
 		end
 		json sensors
 	end
+
+	# Get the current value of the specified sensor
+	get '/api/sensor/:sensor/?' do |sensor|
+		sanitize_sensor!(sensor)
+		json( :value => get_sensor_value(sensor) )
+	end
+
 end
 
 # vim: ts=4:sw=4:ai:noet
