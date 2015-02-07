@@ -72,6 +72,7 @@ class App < Sinatra::Base
 			'REQUEST_METHOD' => 'POST',
 			'PATH_INFO' => '/api/tictac',
 			'rack.input' => StringIO.new,
+			'rack.errors' => $stderr
 		)
 	end
 
