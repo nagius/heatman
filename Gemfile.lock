@@ -10,6 +10,7 @@ GEM
     daemons (1.1.9)
     eventmachine (1.0.3)
     jsmin (1.0.1)
+    librrd (1.0.4)
     multi_json (1.10.1)
     rack (1.5.2)
     rack-protection (1.5.3)
@@ -49,6 +50,7 @@ PLATFORMS
 
 DEPENDENCIES
   chronic_between
+  librrd
   rake
   rufus-scheduler
   sinatra

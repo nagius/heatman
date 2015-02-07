@@ -22,6 +22,7 @@
 ###########################################################################
 
 require 'chronic_between'
+require 'RRD'
 
 # Sinatra helper for Heatman
 module Heatman
@@ -86,7 +87,19 @@ module Heatman
 	def get_sensor_value(sensor)
 		options=settings.sensors[sensor]
 
-		if options.has_key?("command")
+		if options.has_key?("rrd")
+			# Get value from RRD file
+			begin
+				value = RRD.info(options['rrd'])["ds[#{options['dsname']}].last_ds"]
+				if value.nil?
+					raise InternalError, "Bad RRD dsname for #{options['rrd']}: #{options['dsname']}"
+				end
+			rescue Exception => e
+				raise InternalError, "Can't read RRD value: #{e}"
+			end
+
+			return value
+		elsif options.has_key?("command")
 			# Get value from script
 			output = `#{options['command']}`
 			if not $?.success?
