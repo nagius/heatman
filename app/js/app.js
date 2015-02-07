@@ -1,7 +1,11 @@
 // Heatman main Javascript file
 
 $(document).ready(function(){
-	init_update();
+	init();
+
+	$("#refresh").bind("click", function(event, ui) {
+		refresh();
+	});
 
 	$("form :input").change(function(){
 		// Get parameters from the form element 
@@ -57,17 +61,21 @@ function update_status(channel)
 	});
 }
 
-function init_update()
+function refresh()
 {
-	$.get("/api/channels", function (data, status) {
-		// Global variable loaded once
-		window.channels=data;
-
-		// Updated current status
+		// Update current status
 		for (var channel in window.channels)
 		{
 			update_status(channel);
 		}
+}
+
+function init()
+{
+	$.get("/api/channels", function (data, status) {
+		// Global variable loaded once
+		window.channels=data;
+		refresh();
 	});
 }
 
