@@ -4,7 +4,7 @@ $(document).ready(function(){
 	init();
 
 	$("#refresh").bind("click", function(event, ui) {
-		refresh();
+		refresh_all();
 	});
 
 	$("form :input").change(function(){
@@ -61,7 +61,7 @@ function update_status(channel)
 	});
 }
 
-function refresh()
+function refresh_channels()
 {
 		// Update current status
 		for (var channel in window.channels)
@@ -70,12 +70,17 @@ function refresh()
 		}
 }
 
+function refresh_all()
+{
+	refresh_channels();
+}
+
 function init()
 {
 	$.get("/api/channels", function (data, status) {
 		// Global variable loaded once
 		window.channels=data;
-		refresh();
+		refresh_channels();
 	});
 }
 
