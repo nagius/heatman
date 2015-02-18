@@ -67,13 +67,15 @@ class App < Sinatra::Base
 	@@overrides = Hash.new
 
 	# Setup the timer
-	Rufus::Scheduler.new.every(settings.timer, :first_in => "1s") do
-		call(
-			'REQUEST_METHOD' => 'POST',
-			'PATH_INFO' => '/api/tictac',
-			'rack.input' => StringIO.new,
-			'rack.errors' => $stderr
-		)
+	if settings.respond_to? :timer
+		Rufus::Scheduler.new.every(settings.timer, :first_in => "1s") do
+			call(
+				'REQUEST_METHOD' => 'POST',
+				'PATH_INFO' => '/api/tictac',
+				'rack.input' => StringIO.new,
+				'rack.errors' => $stderr
+			)
+		end
 	end
 
 	## Application routes
