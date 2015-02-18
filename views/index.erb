@@ -1,5 +1,14 @@
 
 <ul data-role="listview" data-inset="true" data-dividertheme="b">
+	<li data-role="list-divider">Sensors</li>
+	<% settings.sensors.each do |sensor, options| %>
+		<li>
+			<%= options['label'] %>: <span id="sensor-<%= sensor %>"></span><%= options['unit'] %>
+		</li>
+	<% end %>
+</ul>
+
+<ul data-role="listview" data-inset="true" data-dividertheme="b">
         <li data-role="list-divider">Current mode</li>
 	<% settings.channels.each do |channel, options| %>
 		<li>

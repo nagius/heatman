@@ -63,16 +63,30 @@ function update_status(channel)
 
 function refresh_channels()
 {
-		// Update current status
-		for (var channel in window.channels)
-		{
-			update_status(channel);
-		}
+	// Update current status
+	for (var channel in window.channels)
+	{
+		update_status(channel);
+	}
+}
+
+function refresh_sensors()
+{
+	// Update sensors value
+	for (var sensor in window.sensors)
+	{
+		$.get("/api/sensor/" + sensor, function (data, status) {
+			// Using data['name'] instead of 'sensor' because asychronous variable scope is a mess and doesn't work
+			// In this scope, 'sensor' still evaluate to it's last value, not the value from the loop
+			$("#sensor-"+data["name"]).text(data["value"]);
+		});
+	}
 }
 
 function refresh_all()
 {
 	refresh_channels();
+	refresh_sensors();
 }
 
 function init()
@@ -81,6 +95,11 @@ function init()
 		// Global variable loaded once
 		window.channels=data;
 		refresh_channels();
+	});
+	$.get("/api/sensors", function (data, status) {
+		// Global variable loaded once
+		window.sensors=data;
+		refresh_sensors();
 	});
 }
 
