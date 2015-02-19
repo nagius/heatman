@@ -1,12 +1,14 @@
 
-<ul data-role="listview" data-inset="true" data-dividertheme="b">
-	<li data-role="list-divider">Sensors</li>
+<div data-role="collapsible" id="sensors-box" data-inset="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
+	<legend>Sensors</legend>
+	<ul data-role="listview" data-dividertheme="b">
 	<% settings.sensors.each do |sensor, options| %>
 		<li>
 			<%= options['label'] %>: <span id="sensor-<%= sensor %>"></span><%= options['unit'] %>
 		</li>
 	<% end %>
-</ul>
+	</ul>
+</div>
 
 <ul data-role="listview" data-inset="true" data-dividertheme="b">
         <li data-role="list-divider">Current mode</li>

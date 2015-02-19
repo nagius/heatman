@@ -7,6 +7,10 @@ $(document).ready(function(){
 		refresh_all();
 	});
 
+	$('#sensors-box').on('collapsibleexpand', function (event, ui) {
+		refresh_sensors();
+	});
+
 	$("form :input").change(function(){
 		// Get parameters from the form element 
 		var values   = $(this).attr('id').split('-'),
@@ -72,14 +76,18 @@ function refresh_channels()
 
 function refresh_sensors()
 {
-	// Update sensors value
-	for (var sensor in window.sensors)
+	// Only if the collapsible is expanded
+	if($("#sensors-box").collapsible("option", "collapsed") == false)
 	{
-		$.get("/api/sensor/" + sensor, function (data, status) {
-			// Using data['name'] instead of 'sensor' because asychronous variable scope is a mess and doesn't work
-			// In this scope, 'sensor' still evaluate to it's last value, not the value from the loop
-			$("#sensor-"+data["name"]).text(data["value"]);
-		});
+		for (var sensor in window.sensors)
+		{
+			// Update sensors value
+			$.get("/api/sensor/" + sensor, function (data, status) {
+				// Using data['name'] instead of 'sensor' because asychronous variable scope is a mess and doesn't work
+				// In this scope, 'sensor' still evaluate to it's last value, not the value from the loop
+				$("#sensor-"+data["name"]).text(data["value"]);
+			});
+		}
 	}
 }
 
