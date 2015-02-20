@@ -43,7 +43,7 @@ class App < Sinatra::Base
 
 	# Asset pipeline configuration
 	assets do
-		js :app, [ '/js/*.js' ]
+		js :index, [ '/js/index.js' ]
 
 		css :app, [ '/css/*.css' ]
 
