@@ -65,6 +65,7 @@ class App < Sinatra::Base
 
 	# Global variable 
 	@@overrides = Hash.new
+	@@schedules = Hash.new
 
 	# Setup the timer
 	if settings.respond_to? :timer
@@ -135,8 +136,59 @@ class App < Sinatra::Base
 		switch(channel, mode)
 	end
 
+	# Schedule a mode override
+	post '/api/channel/:channel/schedule/:mode' do |channel, mode|
+		sanitize_channel!(channel)
+		begin
+			sanitize_mode!(channel, mode)
+		rescue Heatman::InternalError
+			raise Heatman::Forbidden, "Mode not allowed"
+		end
+
+		# Convert timestamp string to Time object
+		time = Time.at(params['timestamp'].to_i)
+
+		# Remember this schedule with a random ID
+		@@schedules[rand(36**8).to_s(36)] = {
+			:channel => channel,
+			:mode => mode,
+			:time => time
+		}
+
+		logger.info "Scheduled override saved for channel #{channel} : #{mode} at #{time.iso8601}"
+	end
+	
+	# Get the list of current schedules
+	get '/api/schedules' do
+		json @@schedules
+	end
+
+	# Cancel specified schedule
+	delete '/api/schedule/:id' do |id|
+		if @@schedules.has_key? id
+			logger.info "Scheduled override cancelled for channel #{@@schedules[id][:channel]} : #{@@schedules[id][:mode]} at #{@@schedules[id][:time].iso8601}"
+			@@schedules.delete(id)
+		end
+
+		status 204
+	end
+
 	# Route used by the timer (crontab)
 	post '/api/tictac' do
+		# Execute scheduled overrides
+		@@schedules.each do |id, schedule|
+			if schedule[:time] <= Time.now
+				@@overrides[schedule[:channel]] = {
+					:mode => schedule[:mode],
+					:persistent => false
+				}
+
+				logger.info "Scheduled override set for channel #{schedule[:channel]} : #{schedule[:mode]}"
+				@@schedules.delete(id)
+			end
+		end
+
+		# Switch to requested mode
 		settings.channels.each do |channel, options|
 			if @@overrides.has_key?(channel)
 				if not @@overrides[channel][:persistent] and @@overrides[channel][:mode] == get_scheduled_mode(channel)
@@ -144,7 +196,7 @@ class App < Sinatra::Base
 					@@overrides.delete(channel)
 					logger.info "Manual override expired for channel #{channel}"
 				end
-				
+
 				# Ensure requested mode is enabled (in case of external modification)
 				switch(channel, @@overrides[channel][:mode])
 			else
