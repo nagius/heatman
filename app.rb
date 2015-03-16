@@ -195,10 +195,10 @@ class App < Sinatra::Base
 					# Reset temporary override
 					@@overrides.delete(channel)
 					logger.info "Manual override expired for channel #{channel}"
+				else
+					# Ensure requested mode is enabled (in case of external modification)
+					switch(channel, @@overrides[channel][:mode])
 				end
-
-				# Ensure requested mode is enabled (in case of external modification)
-				switch(channel, @@overrides[channel][:mode])
 			else
 				# Set the scheduled mode only if no override
 				switch(channel, get_scheduled_mode(channel))
