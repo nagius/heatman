@@ -11,7 +11,45 @@ $(document).ready(function(){
 		refresh_sensors();
 	});
 
-	$("form :input").change(function(){
+	$('#sched-channel').on('change', function(event, ui) {
+		// Update mode menu according to selected channel
+		var channel = $(this).val();
+
+		$("#sched-mode").empty();
+		$("#sched-mode").append($('<option disabled hidden selected> -- Mode -- </option>'));
+		for (var mode of window.channels[channel]["modes"])
+		{
+			$("#sched-mode").append($('<option></option>').attr("value", mode).text(mode));
+		}
+		$("#sched-mode").append($('<option></option>').attr("value", "auto").text("Auto"));
+		$("#sched-mode").selectmenu("refresh");
+	});
+
+
+	// Submit a new scheduled override
+	$("form#schedules").submit(function(event) {
+		var channel = $('#sched-channel').val(),
+			mode = $("#sched-mode").val(),
+			date = $("#sched-date").val(),
+			time = $("#sched-time").val(),
+			tz   = $("#sched-tz").val();
+
+		if(channel == null || mode == null)
+		{
+			alert("You need to select a channel and a mode");
+		}
+
+		var data = "timestamp=" + Date.parse(date + "T" + time + ":00.000" + tz)/1000;
+
+		// Call API to save new schedule
+		$.post("/api/channel/" + channel + "/schedule/" + mode, data, function(response, status) {
+			console.log(data);
+		});
+
+		event.preventDefault();
+	});
+
+	$("form.overrides :input").change(function(){
 		// Get parameters from the form element 
 		var values   = $(this).attr('id').split('-'),
 		    channel  = values[0],

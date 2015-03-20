@@ -1,10 +1,15 @@
 <html>
 <head>
 	<link rel="stylesheet" href="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+	<link rel="stylesheet" href="//cdn.jtsage.com/datebox/1.4.5/jqm-datebox-1.4.5.min.css">
 	<%= css :app, :media => 'screen' %>
 
 	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script> 
 	<script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+	<script src="//cdn.jtsage.com/datebox/1.4.5/jqm-datebox-1.4.5.core.min.js"></script>
+	<script src="//cdn.jtsage.com/datebox/1.4.5/jqm-datebox-1.4.5.mode.flipbox.min.js"></script>
+
 	<% # Ugly hack to get template name is order to load associated js %>
 	<%= js template_cache.instance_variable_get(:@cache).first.first[1] %>
 

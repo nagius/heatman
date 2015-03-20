@@ -15,7 +15,7 @@
 	<% settings.channels.each do |channel, options| %>
 		<li>
 			<h4><%= options["label"] %></h4>
-			<form id=<%= channel %>>
+			<form id=<%= channel %> class="overrides">
 				<fieldset data-role="controlgroup" data-type="horizontal" >
 					<% options["modes"].each do |mode| %>
 						<input id="<%= channel %>-<%= mode %>" value="list" type="radio">
@@ -32,3 +32,25 @@
 </ul>
 
 
+<div data-role="collapsible" id="schedule" data-inset="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
+	<legend>Schedules</legend>
+	<form id="schedules">
+		<fieldset data-role="controlgroup" data-type="horizontal" >
+			<select id="sched-channel" data-native-menu="false">
+				<option disabled hidden selected> -- Channel -- </option>
+				<% settings.channels.each do |channel, option| %>
+					<option value="<%= channel %>"><%= channel.capitalize %></option>
+				<% end %>
+			</select>
+			<select id="sched-mode" data-native-menu="false">
+				<option disabled hidden selected> -- Mode -- </option>
+			</select>
+		</fieldset>
+
+		<input id="sched-date" type="text" data-role="datebox" data-options='{"mode":"flipbox"}' value="<%= Time.now.strftime("%F") %>" />
+		<input id="sched-time" type="text" data-role="datebox" data-options='{"mode":"timeflipbox"}' value="<%= Time.now.strftime("%H:%M") %>" />
+		<input id="sched-tz" type="hidden" value="<%= Time.now.strftime("%z") %>" />
+
+		<input type="submit" value="Set">
+	</form>
+</div>
