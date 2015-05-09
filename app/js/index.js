@@ -26,7 +26,7 @@ $(document).ready(function(){
 		$("#sched-mode").append($('<option disabled hidden selected> -- Mode -- </option>'));
 		for (var mode of window.channels[channel]["modes"])
 		{
-			$("#sched-mode").append($('<option></option>').attr("value", mode).text(mode));
+			$("#sched-mode").append($('<option></option>').attr("value", mode).text(mode.capitalize()));
 		}
 		$("#sched-mode").append($('<option></option>').attr("value", "auto").text("Auto"));
 		$("#sched-mode").selectmenu("refresh");
