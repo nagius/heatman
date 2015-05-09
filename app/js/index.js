@@ -1,4 +1,7 @@
 // Heatman main Javascript file
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
 
 $(document).ready(function(){
 	init();
@@ -9,6 +12,10 @@ $(document).ready(function(){
 
 	$('#sensors-box').on('collapsibleexpand', function (event, ui) {
 		refresh_sensors();
+	});
+
+	$('#schedules-box').on('collapsibleexpand', function (event, ui) {
+		refresh_schedules();
 	});
 
 	$('#sched-channel').on('change', function(event, ui) {
@@ -43,7 +50,7 @@ $(document).ready(function(){
 
 		// Call API to save new schedule
 		$.post("/api/channel/" + channel + "/schedule/" + mode, data, function(response, status) {
-			console.log(data);
+			refresh_schedules();
 		});
 
 		event.preventDefault();
@@ -129,10 +136,45 @@ function refresh_sensors()
 	}
 }
 
+function refresh_schedules()
+{
+	// Only if the collapsible is expanded
+	if($("#schedules-box").collapsible("option", "collapsed") == false)
+	{
+		// Clear the current displayed list
+		$("#sched-list li").slice(1).remove();
+
+		$.get("/api/schedules", function (data, status) {
+			for (var id in data)
+			{
+				var sched = '<li class="sched-event">' +
+					'<button id="delete-' + id +'" data-sched-id='+ id +' class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all">Delete</button>' +
+					'<span>' + data[id]['channel'].capitalize() + " set to be " + data[id]['mode'].capitalize() + " on " + data[id]['time'] + '</span>' +
+					'</li>';
+
+				$("#sched-list").append(sched);
+				$("#sched-list").listview("refresh");
+
+				$("#delete-" + id).bind("click", function(event, ui) {
+					// Call API to delete schedule
+					$.ajax({
+						url: "/api/schedule/" + $(this).data("sched-id"),
+						type: 'DELETE',
+						success: function() {
+							refresh_schedules();
+						}
+					});
+				});
+			}
+		});
+	}
+}
+
 function refresh_all()
 {
 	refresh_channels();
 	refresh_sensors();
+	refresh_schedules();
 }
 
 function init()

@@ -2,4 +2,13 @@
 	margin-top: 0;
 }
 
+.sched-event > span {
+	padding-top: 5px;	
+	vertical-align: middle;
+}
+
+.sched-event > .ui-btn {
+	float: right;
+	margin: 0;
+}
 
