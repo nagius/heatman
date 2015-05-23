@@ -149,7 +149,7 @@ function refresh_schedules()
 			{
 				var sched = '<li class="sched-event">' +
 					'<button id="delete-' + id +'" data-sched-id='+ id +' class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all">Delete</button>' +
-					'<span>' + data[id]['channel'].capitalize() + " set to be " + data[id]['mode'].capitalize() + " on " + data[id]['time'] + '</span>' +
+					'<span>' + data[id]['channel'].capitalize() + ": " + data[id]['mode'].capitalize() + " @ " + data[id]['time'] + '</span>' +
 					'</li>';
 
 				$("#sched-list").append(sched);
