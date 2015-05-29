@@ -160,7 +160,8 @@ class App < Sinatra::Base
 	
 	# Get the list of current schedules
 	get '/api/schedules' do
-		json @@schedules
+		# Return nested hash with time as timestamp instead of string
+		json Hash[@@schedules.map {|id,sched| [id, Hash[sched.map {|k,v| [k, k.eql?(:time) ? v.to_i : v]}]]}] 
 	end
 
 	# Cancel specified schedule
