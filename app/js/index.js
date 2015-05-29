@@ -38,15 +38,20 @@ $(document).ready(function(){
 		var channel = $('#sched-channel').val(),
 			mode = $("#sched-mode").val(),
 			date = $("#sched-date").val(),
-			time = $("#sched-time").val(),
-			tz   = $("#sched-tz").val();
+			time = $("#sched-time").val();
 
 		if(channel == null || mode == null)
 		{
 			alert("You need to select a channel and a mode");
 		}
 
-		var data = "timestamp=" + Date.parse(date + "T" + time + ":00.000" + tz)/1000;
+		if(date.length == 0 || time.length == 0)
+		{
+			alert("You need to select a date and a time");
+		}
+
+		// Date.parse use local timezone by default
+		var data = "timestamp=" + Date.parse(date + "T" + time + ":00.000")/1000;
 
 		// Call API to save new schedule
 		$.post("/api/channel/" + channel + "/schedule/" + mode, data, function(response, status) {

@@ -47,9 +47,8 @@
 			</select>
 		</fieldset>
 
-		<input id="sched-date" type="text" data-role="datebox" data-options='{"mode":"flipbox"}' value="<%= Time.now.strftime("%F") %>" />
-		<input id="sched-time" type="text" data-role="datebox" data-options='{"mode":"timeflipbox"}' value="<%= Time.now.strftime("%H:%M") %>" />
-		<input id="sched-tz" type="hidden" value="<%= Time.now.strftime("%z") %>" />
+		<input id="sched-date" type="text" data-role="datebox" data-options='{"mode":"flipbox"}' />
+		<input id="sched-time" type="text" data-role="datebox" data-options='{"mode":"timeflipbox"}' />
 
 		<input type="submit" value="Set">
 	</form>
