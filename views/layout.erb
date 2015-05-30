@@ -10,8 +10,7 @@
 	<script src="//cdn.jtsage.com/datebox/1.4.5/jqm-datebox-1.4.5.core.min.js"></script>
 	<script src="//cdn.jtsage.com/datebox/1.4.5/jqm-datebox-1.4.5.mode.flipbox.min.js"></script>
 
-	<% # Ugly hack to get template name is order to load associated js %>
-	<%= js template_cache.instance_variable_get(:@cache).first.first[1] %>
+	<%= js :app %>
 
 	<title><%= settings.title %></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
