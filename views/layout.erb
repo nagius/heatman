@@ -1,14 +1,14 @@
 <html>
 <head>
 	<link rel="stylesheet" href="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-	<link rel="stylesheet" href="<%= to("/static/css/jqm-datebox-1.4.5.min.css") %>">
+	<link rel="stylesheet" href="<%= to("/static/css/jqm-datebox-1.4.5.min.css", absolute=false) %>">
 	<%= css :app, :media => 'screen' %>
 
 	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script> 
 	<script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
-	<script src="<%= to("/static/js/jqm-datebox-1.4.5.core.min.js") %>"></script>
-	<script src="<%= to("/static/js/jqm-datebox-1.4.5.mode.flipbox.min.js") %>"></script>
+	<script src="<%= to("/static/js/jqm-datebox-1.4.5.core.min.js", absolute=false) %>"></script>
+	<script src="<%= to("/static/js/jqm-datebox-1.4.5.mode.flipbox.min.js", absolute=false) %>"></script>
 
 	<%= js :app %>
 
