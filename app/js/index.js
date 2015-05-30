@@ -35,6 +35,8 @@ $(document).ready(function(){
 
 	// Submit a new scheduled override
 	$("form#schedules").submit(function(event) {
+		event.preventDefault();
+
 		var channel = $('#sched-channel').val(),
 			mode = $("#sched-mode").val(),
 			date = $("#sched-date").val(),
@@ -43,11 +45,13 @@ $(document).ready(function(){
 		if(channel == null || mode == null)
 		{
 			alert("You need to select a channel and a mode");
+			return;
 		}
 
 		if(date.length == 0 || time.length == 0)
 		{
 			alert("You need to select a date and a time");
+			return;
 		}
 
 		// Date.parse use local timezone by default
@@ -57,8 +61,6 @@ $(document).ready(function(){
 		$.post("/api/channel/" + channel + "/schedule/" + mode, data, function(response, status) {
 			refresh_schedules();
 		});
-
-		event.preventDefault();
 	});
 
 	$("form.overrides :input").change(function(){
