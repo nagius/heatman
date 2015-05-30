@@ -55,6 +55,7 @@ class App < Sinatra::Base
 
 		js_compression  :jsmin    # :jsmin | :yui | :closure | :uglify
 		css_compression :simple   # :simple | :sass | :yui | :sqwish
+		prebuild true
 	end 
 
 	# Application configuration
