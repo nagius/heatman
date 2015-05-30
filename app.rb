@@ -38,12 +38,13 @@ class App < Sinatra::Base
 	helpers Heatman
 
 	# Framework configuration
-	configure :production, :development do
-		set :show_exceptions, :after_handler
+	configure :production do
 		enable :logging
 	end
 
 	configure :development do
+		set :show_exceptions, :after_handler
+		enable :logging
 		set :logging, Logger::DEBUG
 	end
 
