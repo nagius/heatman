@@ -57,3 +57,6 @@ DEPENDENCIES
   sinatra-assetpack
   sinatra-contrib
   thin
+
+BUNDLED WITH
+   1.10.1

@@ -27,7 +27,9 @@ require 'sinatra/json'
 require 'sinatra/config_file'
 require 'sinatra/assetpack'
 require 'rufus/scheduler'
+require 'logger'
 require_relative 'app/heatman'
+require_relative 'app/logs'
 
 class App < Sinatra::Base
 	register Sinatra::AssetPack
@@ -39,6 +41,10 @@ class App < Sinatra::Base
 	configure :production, :development do
 		set :show_exceptions, :after_handler
 		enable :logging
+	end
+
+	configure :development do
+		set :logging, Logger::DEBUG
 	end
 
 	# Asset pipeline configuration
@@ -53,6 +59,11 @@ class App < Sinatra::Base
 
 	# Application configuration
 	config_file "config/config.yml"
+
+	# Logging configuration
+	before do
+		logger.formatter = CustomFormatter.new request.env
+	end
 
 	# Error handling
 	error Heatman::Forbidden do |e|
