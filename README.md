@@ -23,6 +23,8 @@ on
 ### Configuration example
 
 ```
+timer: "5m"
+
 channels:
   lights:
     label: "My fancy lights"
@@ -178,5 +180,18 @@ Override the current channel's mode.
 Mode can be 'auto' to switch back to scheduled mode.
 If the parameter ''persistent=true'' is send, the scheduler will be permanently disabled for this channel.
 Return ''200 OK'' is the state has been changed, or ''204 No content'' if the requested mode was already enabled.
+
+* GET /api/schedules
+
+Return the current hash of scheduled overrides.
+
+* POST /api/channel/\<channel\>/schedule/\<mode\>
+Params : timestamp=\<unixtimestamp\>
+
+Schedule a new override.
+
+* DELETE /api/schedule/\<schedule_id\>
+
+Cancel a scheduled override.
 
 EOF
