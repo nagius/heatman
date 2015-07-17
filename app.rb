@@ -117,6 +117,7 @@ class App < Sinatra::Base
 
 		json(
 			:mode => get_current_mode(channel),
+			:time => get_last_change(channel),
 			:override => @@overrides.has_key?(channel),
 			:persistent => @@overrides[channel].nil? ? false : @@overrides[channel][:persistent])
 	end

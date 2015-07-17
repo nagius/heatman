@@ -26,6 +26,8 @@ require 'RRD'
 
 # Sinatra helper for Heatman
 module Heatman
+	# Store timestamp of lastest state change for each channel
+	@@timestamps = Hash.new(0)
 
 	def sanitize_channel!(channel)
 		if not settings.channels.has_key?(channel)
@@ -50,6 +52,7 @@ module Heatman
 		if get_current_mode(channel) != mode
 			logger.info "Mode changed to #{mode} for channel #{channel}"
 			apply(channel, mode)
+			@@timestamps[channel] = Time.now.to_i
 			status 200
 		else
 			status 204
@@ -71,6 +74,10 @@ module Heatman
 		mode=apply(channel, "status").strip
 		sanitize_mode!(channel, mode)
 		return mode
+	end
+
+	def get_last_change(channel)
+		return @@timestamps[channel]
 	end
 
 	def get_scheduled_mode(channel)
