@@ -14,7 +14,9 @@
         <li data-role="list-divider">Current mode</li>
 	<% settings.channels.each do |channel, options| %>
 		<li>
-			<h4><%= options["label"] %></h4>
+			<h4><%= options["label"] %>
+				<span class="timeago" id="ts-<%= channel %>"></span>
+			</h4>
 			<form id=<%= channel %> class="overrides">
 				<fieldset data-role="controlgroup" data-type="horizontal" >
 					<% options["modes"].each do |mode| %>

@@ -114,6 +114,8 @@ function update_status(channel)
 		$("#"+channel+"-persistent").prop("checked", data["persistent"]);
 		$("#"+channel+"-persistent").flipswitch("refresh");
 
+		// Set the update time
+		$("#ts-"+channel).text(timeago(data.time));
 	});
 }
 
@@ -201,6 +203,25 @@ function init()
 function format_date(timestamp)
 {
 	return new Date(timestamp * 1000).toLocaleString();
+}
+
+function timeago(timestamp)
+{
+	if(timestamp == 0)
+		return "";
+	
+	time = Math.round(Date.now()/1000) - timestamp
+
+	if(time < 60)
+		return "Just now";
+	else if (time < 3600)
+		return Math.round(time/60) + " min ago";
+	else if (time < 86400)
+		return Math.round(time / 3600) + " hours and " + Math.round(time % 3600 / 60) + " min ago";
+	else
+		return Math.round(time / 86400) + " days and " + Math.round(time % 86400 / 3660) + " hours ago";
+
+	return timestamp;
 }
 
 // vim: ts=4:sw=4:ai:noet

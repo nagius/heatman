@@ -12,3 +12,10 @@
 	margin: 0;
 }
 
+.timeago {
+	font-size: 0.7em;
+	font-style: italic;
+	font-weight: normal;
+	padding-left: 5px;
+}
+
