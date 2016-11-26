@@ -35,12 +35,12 @@ channels:
       - "green"
       - "off"
     schedules:
-        blue: "17:00-19:00"
-	yellow: "Monday 09:00-09:30, Sunday 12:00-13:00"
+      blue: "17:00-19:00"
+      yellow: "Monday 09:00-09:30, Sunday 12:00-13:00"
     default: "off"
 ```
 
-In this example, the light will be switched to "blue" each day between 5pm and 7pm, and switched to "yellow" on Monday at 9am for half an hour, andon Sunday at noon for one hour. It will be "off" the rest of the time.
+In this example, the light will be switched to "blue" each day between 5pm and 7pm, and switched to "yellow" on Monday at 9am for half an hour, and on Sunday at noon for one hour. It will be "off" the rest of the time.
 
 See https://github.com/jrobertson/chronic_between for more example of scheduler syntax.
 
@@ -189,9 +189,23 @@ Return the current hash of scheduled overrides.
 Params : timestamp=\<unixtimestamp\>
 
 Schedule a new override.
+Mode can be 'auto' to cancel a previous override.
 
 * DELETE /api/schedule/\<schedule_id\>
 
 Cancel a scheduled override.
+
+* GET /api/sensors
+
+Return the list of available sensors.
+
+* GET /api/sensor/\<sensor_name\>
+
+Return the current value of the specified sensor.
+
+* POST /api/tictac
+
+Trigger a check of the current state and apply modification if needed.
+This route is usually called by an internal timer and exposed here only for debugging purpose.
 
 EOF
