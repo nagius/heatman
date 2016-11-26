@@ -153,10 +153,12 @@ class App < Sinatra::Base
 	# Schedule a mode override
 	post '/api/channel/:channel/schedule/:mode' do |channel, mode|
 		sanitize_channel!(channel)
-		begin
-			sanitize_mode!(channel, mode)
-		rescue Heatman::InternalError
-			raise Heatman::Forbidden, "Mode not allowed"
+		if mode != "auto"
+			begin
+				sanitize_mode!(channel, mode)
+			rescue Heatman::InternalError
+				raise Heatman::Forbidden, "Mode not allowed"
+			end
 		end
 
 		# Convert timestamp string to Time object
@@ -193,10 +195,14 @@ class App < Sinatra::Base
 		# Execute scheduled overrides
 		@@schedules.each do |id, schedule|
 			if schedule[:time] <= Time.now
-				@@overrides[schedule[:channel]] = {
-					:mode => schedule[:mode],
-					:persistent => false
-				}
+				if schedule[:mode] == "auto"
+					@@overrides.delete(schedule[:channel])
+				else
+					@@overrides[schedule[:channel]] = {
+						:mode => schedule[:mode],
+						:persistent => false
+					}
+				end
 
 				logger.info "Scheduled override set for channel #{schedule[:channel]} : #{schedule[:mode]}"
 				@@schedules.delete(id)
