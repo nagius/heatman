@@ -79,7 +79,7 @@ Production run
 
 As this is a small setup with few requests and designed to run on a Raspberri Pi, a full heavy-production stack like Apache/Passenger or Nginx/Unicorn is not the best option, even if it will work. Instead, the simple setup described here, using Thin as application server and Nginx as front-facing server seems to be more appropriate.
 
-The use of RVM is recommended.
+The use of RVM or Rbenv is recommended.
 
 ### Thin configuration
 
