@@ -211,18 +211,22 @@ class App < Sinatra::Base
 
 		# Switch to requested mode
 		settings.channels.each do |channel, options|
-			if @@overrides.has_key?(channel)
-				if not @@overrides[channel][:persistent] and @@overrides[channel][:mode] == get_scheduled_mode(channel)
-					# Reset temporary override
-					@@overrides.delete(channel)
-					logger.info "Manual override expired for channel #{channel}"
+			begin
+				if @@overrides.has_key?(channel)
+					if not @@overrides[channel][:persistent] and @@overrides[channel][:mode] == get_scheduled_mode(channel)
+						# Reset temporary override
+						@@overrides.delete(channel)
+						logger.info "Manual override expired for channel #{channel}"
+					else
+						# Ensure requested mode is enabled (in case of external modification)
+						switch(channel, @@overrides[channel][:mode])
+					end
 				else
-					# Ensure requested mode is enabled (in case of external modification)
-					switch(channel, @@overrides[channel][:mode])
+					# Set the scheduled mode only if no override
+					switch(channel, get_scheduled_mode(channel))
 				end
-			else
-				# Set the scheduled mode only if no override
-				switch(channel, get_scheduled_mode(channel))
+			rescue Heatman::InternalError => e
+				logger.error "Failed to switch channel #{channel}: #{e.message}"
 			end
 		end
 	end
