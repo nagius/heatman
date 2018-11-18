@@ -44,6 +44,7 @@ In this example, the light will be switched to "blue" each day between 5pm and 7
 
 See https://github.com/jrobertson/chronic_between for more example of scheduler syntax.
 
+All overrides and scheduled settings specified at runtime via the API will be saved and re-applied on restart. The directory configured by `datadir:` need to be writable.
 
 Installation
 ------------
@@ -69,10 +70,10 @@ Development run
 ---------------
 
 ```
-rackup
+rerun "rackup -p 9393"
 ```
 
-And point your browser to http://localhost:9292
+And point your browser to http://localhost:9393
 
 Production run
 --------------

@@ -62,8 +62,12 @@ class App < Sinatra::Base
 	# Application configuration
 	config_file "config/config.yml"
 
-	# Logging configuration
 	before do
+		# Load saved status at startup
+		@@overrides ||= load_overrides()
+		@@schedules ||= load_schedules()
+
+		# Logging configuration
 		logger.formatter = CustomFormatter.new request.env
 	end
 
@@ -76,9 +80,9 @@ class App < Sinatra::Base
 		halt 500, json(:err => e.message)
 	end
 
-	# Global variable 
-	@@overrides = Hash.new
-	@@schedules = Hash.new
+	# Global variable (to be initialized at first request)
+	@@overrides = nil
+	@@schedules = nil
 
 	# Setup the timer
 	if settings.respond_to? :timer
@@ -127,6 +131,8 @@ class App < Sinatra::Base
 		sanitize_channel!(channel)
 
 		@@overrides.delete(channel)
+		save_overrides(@@overrides)
+
 		logger.info "Manual override deleted for channel #{channel}"
 		switch(channel, get_scheduled_mode(channel))
 	end
@@ -145,6 +151,7 @@ class App < Sinatra::Base
 			:mode => mode,
 			:persistent => params['persistent'] == "true"
 		}
+		save_overrides(@@overrides)
 
 		logger.info "Manual override set for channel #{channel} : #{params['persistent'] == "true"?"persistent ":"" }#{mode}"
 		switch(channel, mode)
@@ -165,13 +172,15 @@ class App < Sinatra::Base
 		time = Time.at(params['timestamp'].to_i)
 
 		# Remember this schedule with a random ID
-		@@schedules[rand(36**8).to_s(36)] = {
+		@@schedules[rand(36**8).to_s(36).to_sym] = {
 			:channel => channel,
 			:mode => mode,
 			:time => time
 		}
+		save_schedules(@@schedules)
 
-		logger.info "Scheduled override saved for channel #{channel} : #{mode} at #{time.iso8601}"
+		logger.info "Scheduled override saved for channel #{channel} : #{mode} at #{time.rfc2822}"
+		status 200
 	end
 	
 	# Get the list of current schedules
@@ -183,8 +192,9 @@ class App < Sinatra::Base
 	# Cancel specified schedule
 	delete '/api/schedule/:id' do |id|
 		if @@schedules.has_key? id
-			logger.info "Scheduled override cancelled for channel #{@@schedules[id][:channel]} : #{@@schedules[id][:mode]} at #{@@schedules[id][:time].iso8601}"
+			logger.info "Scheduled override cancelled for channel #{@@schedules[id][:channel]} : #{@@schedules[id][:mode]} at #{@@schedules[id][:time].rfc2822}"
 			@@schedules.delete(id)
+			save_schedules(@@schedules)
 		end
 
 		status 204
@@ -206,6 +216,9 @@ class App < Sinatra::Base
 
 				logger.info "Scheduled override set for channel #{schedule[:channel]} : #{schedule[:mode]}"
 				@@schedules.delete(id)
+
+				save_schedules(@@schedules)
+				save_overrides(@@overrides)
 			end
 		end
 
@@ -216,6 +229,8 @@ class App < Sinatra::Base
 					if not @@overrides[channel][:persistent] and @@overrides[channel][:mode] == get_scheduled_mode(channel)
 						# Reset temporary override
 						@@overrides.delete(channel)
+						save_overrides(@@overrides)
+
 						logger.info "Manual override expired for channel #{channel}"
 					else
 						# Ensure requested mode is enabled (in case of external modification)
