@@ -232,6 +232,7 @@ class App < Sinatra::Base
 						save_overrides(@@overrides)
 
 						logger.info "Manual override expired for channel #{channel}"
+						status 200
 					else
 						# Ensure requested mode is enabled (in case of external modification)
 						switch(channel, @@overrides[channel][:mode])
@@ -242,8 +243,12 @@ class App < Sinatra::Base
 				end
 			rescue Heatman::InternalError => e
 				logger.error "Failed to switch channel #{channel}: #{e.message}"
+				status 500
 			end
 		end
+
+		# Clear any body that may be populated by an exception
+		body ""
 	end
 
 	# Get the list of available sensors 
