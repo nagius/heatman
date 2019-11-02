@@ -40,6 +40,7 @@ class App < Sinatra::Base
 	# Framework configuration
 	configure :production do
 		enable :logging
+		set :logging, Logger::DEBUG
 	end
 
 	configure :development do
@@ -191,6 +192,7 @@ class App < Sinatra::Base
 
 	# Cancel specified schedule
 	delete '/api/schedule/:id' do |id|
+		id=id.to_sym
 		if @@schedules.has_key? id
 			logger.info "Scheduled override cancelled for channel #{@@schedules[id][:channel]} : #{@@schedules[id][:mode]} at #{@@schedules[id][:time].rfc2822}"
 			@@schedules.delete(id)
