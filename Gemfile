@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-gem 'sinatra', '~>1.4.8'
+gem 'sinatra', '~>2.2.3'
 gem 'sinatra-contrib'
 gem 'sinatra-assetpack'
 gem 'chronic_between'
