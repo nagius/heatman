@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
-gem 'sinatra', '~>1.4.8'
+gem 'sinatra', '~>3.2.0'
 gem 'sinatra-contrib'
-gem 'sinatra-assetpack'
 gem 'chronic_between'
 gem 'rufus-scheduler'
 gem 'librrd'

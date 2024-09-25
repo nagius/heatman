@@ -25,14 +25,12 @@
 require 'sinatra/base'
 require 'sinatra/json'
 require 'sinatra/config_file'
-require 'sinatra/assetpack'
 require 'rufus/scheduler'
 require 'logger'
 require_relative 'app/heatman'
 require_relative 'app/logs'
 
 class App < Sinatra::Base
-	register Sinatra::AssetPack
 	register Sinatra::ConfigFile
 	helpers Sinatra::JSON
 	helpers Heatman
@@ -48,17 +46,6 @@ class App < Sinatra::Base
 		enable :logging
 		set :logging, Logger::DEBUG
 	end
-
-	# Asset pipeline configuration
-	assets do
-		js :app, [ '/js/*.js' ]
-
-		css :app, [ '/css/*.css' ]
-
-		js_compression  :jsmin    # :jsmin | :yui | :closure | :uglify
-		css_compression :simple   # :simple | :sass | :yui | :sqwish
-		prebuild true
-	end 
 
 	# Application configuration
 	config_file "config/config.yml"

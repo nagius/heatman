@@ -2,7 +2,7 @@
 <head>
 	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css">
 	<link rel="stylesheet" href="<%= to("/static/css/jqm-datebox-1.4.5.min.css", absolute=false) %>">
-	<%= css :app, :media => 'screen' %>
+	<link rel="stylesheet" href="<%= to("/static/css/style.css", absolute=false) %>">
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> 
 	<script src="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
@@ -10,7 +10,7 @@
 	<script src="<%= to("/static/js/jqm-datebox-1.4.5.core.min.js", absolute=false) %>"></script>
 	<script src="<%= to("/static/js/jqm-datebox-1.4.5.mode.flipbox.min.js", absolute=false) %>"></script>
 
-	<%= js :app %>
+	<script src="<%= to("/static/js/main.js", absolute=false) %>"></script>
 
 	<title><%= settings.title %></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
