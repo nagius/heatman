@@ -1,0 +1,25 @@
+---
+title: "Heatman"
+# See https://github.com/jmettraux/rufus-scheduler for syntax
+timer: "5m"
+
+datadir: "/tmp/heatman"
+
+channels:
+  boiler:
+    label: "Bathroom boiler"
+    command: "stubs/channel.sh"
+    modes:
+      - "on"
+      - "off"
+      - "eco"
+    schedules:
+        'on': "17:00-19:00"
+    default: "off"
+
+sensors:
+  power:
+    label: "Electric consumption"
+    unit: "w"
+    command: "stubs/sensor.sh" 
+
